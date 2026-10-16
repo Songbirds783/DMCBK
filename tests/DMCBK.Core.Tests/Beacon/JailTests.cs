@@ -492,6 +492,37 @@ public sealed class JailTests : IDisposable
     }
 
     [Fact]
+    public async Task BlockAt_WithStateProperties_ReturnsPropertyMap()
+    {
+        var host = new JailHost();
+        host.Blocks[(3, 64, -4)] = new BeaconBlockInfo("oak_stairs", 6425,
+            new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["facing"] = "east",
+                ["half"] = "bottom",
+                ["shape"] = "straight",
+                ["waterlogged"] = "false",
+            });
+
+        IReadOnlyList<string> output = await RunShowingAsync(host,
+            "set b to world.block_at(3, 64, -4)\nshow b.properties.facing\nshow b.properties.waterlogged\n");
+
+        Assert.Equal(new[] { "east", "false" }, output);
+    }
+
+    [Fact]
+    public async Task BlockAt_PropertylessBlock_ReadsPropertiesAsNone()
+    {
+        var host = new JailHost();
+        host.Blocks[(5, 64, -6)] = new BeaconBlockInfo("bookshelf", 3835);
+
+        IReadOnlyList<string> output = await RunShowingAsync(host,
+            "set b to world.block_at(5, 64, -6)\nshow b.properties\n");
+
+        Assert.Equal("none", output[0]);
+    }
+
+    [Fact]
     public async Task BlockAt_Unloaded_RaisesCatchably()
     {
         var host = new JailHost();

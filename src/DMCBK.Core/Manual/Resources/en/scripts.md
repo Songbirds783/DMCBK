@@ -364,7 +364,10 @@ open), `inv.take`, `inv.put`, `craft_list`, `craft_one`. A matcher is text (`"co
 matches type id or display name, case-insensitive, `minecraft:` prefix optional) or a map
 (`{type: "compass", name_contains: "server"}`).
 
-World: `world.block_at`, `world.light_at`, `world.biome_at`, `world.sign_text(x, y, z)`
+World: `world.block_at` (a map with name, id, and properties, where properties holds the
+block-state properties such as `facing` or `waterlogged` as a name-to-value map, or none
+when the block has no state properties or their values are unknown for this version),
+`world.light_at`, `world.biome_at`, `world.sign_text(x, y, z)`
 (the joined sign lines, or none when no sign is tracked there, needs `world.read`),
 `world.find_blocks("chest", 16, 10)` (nearest first, capped at 64 results inside a
 32-block radius, needs `world.search`), `world.find_signs("Storage", 32, 5)` (signs whose

@@ -51,10 +51,11 @@ public interface IBeaconSessionReads
     double? ServerTps { get; }
 }
 
-/// <summary>One block read result: display name plus numeric id.</summary>
+/// <summary>One block read result: display name, numeric id, and the resolved state properties when any value is known.</summary>
 /// <param name="Name">The block's display name.</param>
 /// <param name="Id">The block's numeric id.</param>
-public sealed record BeaconBlockInfo(string Name, int Id);
+/// <param name="Properties">The block-state properties (for example <c>facing</c> to <c>north</c>), or null when the state declares no properties or their values are not known for this version.</param>
+public sealed record BeaconBlockInfo(string Name, int Id, IReadOnlyDictionary<string, string>? Properties = null);
 
 /// <summary>
 /// One tracked entity for the <c>entities.*</c> builtins and the <c>entity_add</c>/<c>entity_remove</c> hooks.

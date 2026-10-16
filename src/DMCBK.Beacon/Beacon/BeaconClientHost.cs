@@ -425,7 +425,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
             Task<BlockInfo> work = _client.Game.World.GetBlockAsync(new BlockPos(x, y, z), CancellationToken.None);
             _client.WaitForCommandWork(work);
             BlockInfo info = work.GetAwaiter().GetResult();
-            return info.ChunkLoaded ? new BeaconBlockInfo(info.BlockId, info.StateId) : null;
+            return info.ChunkLoaded ? new BeaconBlockInfo(info.BlockId, info.StateId, info.Properties) : null;
         }
         catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException)

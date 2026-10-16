@@ -361,7 +361,25 @@ public sealed class WorldApi
         BlockState state = snapshot.State;
         return new BlockInfo(
             snapshot.Position, state.StateId, state.Block.Id.ToString(),
-            state.IsAir, state.IsSolid, state.IsFluid, state.IsWaterlogged, state.BlocksMotion, snapshot.ChunkLoaded);
+            state.IsAir, state.IsSolid, state.IsFluid, state.IsWaterlogged, state.BlocksMotion,
+            PropertiesOf(state), snapshot.ChunkLoaded);
+    }
+
+    /// <summary>Resolves every property the state declares whose value the version's block data proves, in vanilla declaration order. Vanilla encodes the properties in the state id itself, so the decode is arithmetic over the block's property domains. Null when the state declares no properties at all (air, pre-flattening eras, propertyless blocks) or when none of the declared domains could be proven, which keeps an unproven property from reading as present.</summary>
+    private static IReadOnlyDictionary<string, string>? PropertiesOf(BlockState state)
+    {
+        IReadOnlyList<string> names = state.PropertyNames;
+        if (names.Count == 0)
+            return null;
+
+        Dictionary<string, string> map = new(StringComparer.Ordinal);
+        foreach (string name in names)
+        {
+            if (state.TryGetProperty(name, out string value))
+                map[name] = value;
+        }
+
+        return map.Count > 0 ? map : null;
     }
 }
 
@@ -492,6 +510,7 @@ internal static class SignComponentText
 /// <param name="BlockId">The BlockId value.</param>
 /// <param name="StateId">The StateId value.</param>
 /// <param name="Position">The Position value.</param>
+/// <param name="Properties">The resolved block-state properties (for example <c>facing</c> to <c>north</c>), or null when the state declares no properties or the version's data proves none of their values.</param>
 /// <summary>A typed view of one block state at a position.</summary>
 /// <param name="ChunkLoaded">
 /// Whether the chunk column holding <paramref name="Position"/> is loaded.
@@ -506,6 +525,7 @@ public sealed record BlockInfo(
     bool IsFluid,
     bool IsWaterlogged,
     bool BlocksMotion,
+    IReadOnlyDictionary<string, string>? Properties = null,
     bool ChunkLoaded = true);
 
 /// <summary>The first block a view raycast entered.</summary>

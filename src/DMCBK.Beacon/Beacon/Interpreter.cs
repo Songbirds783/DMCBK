@@ -3147,6 +3147,10 @@ public sealed class BeaconInterpreter
                 {
                     ["name"] = BeaconValue.Text(block.Name),
                     ["id"] = BeaconValue.Number(block.Id),
+                    ["properties"] = block.Properties is { } properties
+                        ? BeaconValue.Map(properties.ToDictionary(
+                            p => p.Key, p => (BeaconValue)BeaconValue.Text(p.Value), StringComparer.Ordinal))
+                        : BeaconValue.None,
                 });
             }
 
