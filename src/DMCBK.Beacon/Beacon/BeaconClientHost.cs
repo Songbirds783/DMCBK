@@ -1248,7 +1248,11 @@ public sealed class BeaconClientHost : IBeaconHostServices
                     offer.Uses,
                     offer.MaxUses,
                     offer.IsSoldOut,
-                    offer.Xp));
+                    offer.Xp,
+                    offer.BaseFirstCost is null ? null : ToTradeItem(offer.BaseFirstCost),
+                    offer.SpecialPrice,
+                    offer.Demand,
+                    offer.PriceMultiplier));
             }
 
             return offers;

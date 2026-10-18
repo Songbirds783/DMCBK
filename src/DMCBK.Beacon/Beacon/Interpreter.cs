@@ -4751,6 +4751,10 @@ public sealed class BeaconInterpreter
             ["max_uses"] = BeaconValue.Number(offer.MaxUses),
             ["sold_out"] = BeaconValue.YesNo(offer.SoldOut),
             ["xp"] = BeaconValue.Number(offer.Xp),
+            ["base_first"] = offer.BaseFirst is null ? BeaconValue.None : ToTradeItemMap(offer.BaseFirst),
+            ["special_price"] = BeaconValue.Number(offer.SpecialPrice),
+            ["demand"] = BeaconValue.Number(offer.Demand),
+            ["price_multiplier"] = BeaconValue.Number(offer.PriceMultiplier),
         });
     }
 

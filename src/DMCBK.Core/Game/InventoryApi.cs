@@ -425,7 +425,11 @@ public sealed class InventoryApi
                 offer.Uses,
                 offer.MaxUses,
                 offer.IsSoldOut,
-                offer.Xp));
+                offer.Xp,
+                ItemStackInfo.From(offer.BaseFirstCost, _translations),
+                offer.PriceMultiplier,
+                offer.SpecialPrice,
+                offer.Demand));
         }
 
         return trades;
@@ -528,13 +532,17 @@ public sealed record RecipePlacementOutcome(
     RecipeCraftRefusal Refusal);
 
 /// <summary>One villager/merchant trade offer.</summary>
-/// <param name="FirstCost">The (price-adjusted) first input.</param>
+/// <param name="FirstCost">The (price-adjusted) first input: what the client currently shows.</param>
 /// <param name="SecondCost">The optional second input.</param>
 /// <param name="Result">The output.</param>
 /// <param name="Uses">Uses consumed so far.</param>
 /// <param name="MaxUses">Uses before the offer is disabled.</param>
 /// <param name="IsSoldOut">Whether the offer is currently sold out.</param>
 /// <param name="Xp">Villager xp granted by the trade.</param>
+/// <param name="BaseFirstCost">The unadjusted first input (the base price before demand/special-price effects), or null when the server did not report it.</param>
+/// <param name="PriceMultiplier">The demand price sensitivity (0..1).</param>
+/// <param name="SpecialPrice">The flat special-price delta (hero of the village / reputation; negative means cheaper).</param>
+/// <param name="Demand">The current demand counter that raises the price after heavy trading.</param>
 public sealed record TradeOfferInfo(
     ItemStackInfo FirstCost,
     ItemStackInfo? SecondCost,
@@ -542,4 +550,15 @@ public sealed record TradeOfferInfo(
     int Uses,
     int MaxUses,
     bool IsSoldOut,
-    int Xp);
+    int Xp,
+    ItemStackInfo? BaseFirstCost = null,
+    float PriceMultiplier = 0f,
+    int SpecialPrice = 0,
+    int Demand = 0)
+{
+    /// <summary>True when the first input is cheaper than the base price (a discount).</summary>
+    public bool IsDiscounted => BaseFirstCost is { } baseCost && FirstCost.Count < baseCost.Count;
+
+    /// <summary>True when the first input is more expensive than the base price (a demand markup).</summary>
+    public bool IsMarkedUp => BaseFirstCost is { } baseCost && FirstCost.Count > baseCost.Count;
+}

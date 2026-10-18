@@ -3917,8 +3917,9 @@ Entities: `entities.near([radius[, max]])`, `entities.of_type(type[, radius[, ma
 at 64 nearest-first; ids hold for one session only). `move_follow` takes a player name,
 an id, or a row.
 
-Trade and enchanting work the open container: `trade.list()` (index, first, second,
-result, uses, max_uses, sold_out, xp), `trade.select(i)`, `trade.buy(i[, n])`
+Trade and enchanting work the open container: `trade.list()` (index, first, base_first,
+second, result, uses, max_uses, sold_out, xp, special_price, demand, price_multiplier),
+`trade.select(i)`, `trade.buy(i[, n])`
 (answers completed units); `enchant.options()` (slot, level), `enchant.choose(slot |
 "top" | "middle" | "bottom")`. Open the window first (`interact` a villager,
 `world.use` a table) and wait for `on container_open`; a missing window raises

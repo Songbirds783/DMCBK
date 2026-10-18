@@ -108,6 +108,8 @@ The newest movement request wins. The previous request receives a superseded err
 
 `trade.list()` reads offers. `trade.buy(index, count)` returns completed units. `enchant.options()` reads choices. `enchant.choose("top")` selects one.
 
+Price fields: `base_first` is the unadjusted base price, `first` is what the client currently shows. When `first` counts more than `base_first` the trade is marked up (demand), fewer means discounted (reputation/hero of the village). `special_price` is the flat delta (negative = cheaper), `demand` is the demand counter, `price_multiplier` is the demand sensitivity (0..1). The server only pushes fresh offers while a merchant window is open, so reopen the window (`interact`) to see restocks and price changes.
+
 ## Server dialogs
 
 1. Match a stable input key in the `dialog` event.

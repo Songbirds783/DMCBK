@@ -99,13 +99,17 @@ public sealed record BeaconTradeItem(string Type, string Name, int Count);
 
 /// <summary>One merchant offer for <c>trade.list</c>, in select order.</summary>
 /// <param name="Index">The trade index a client selects.</param>
-/// <param name="First">The (price-adjusted) first input.</param>
+/// <param name="First">The (price-adjusted) first input: what the client currently shows.</param>
 /// <param name="Second">The optional second input, or null.</param>
 /// <param name="Result">The output.</param>
 /// <param name="Uses">Uses consumed so far.</param>
 /// <param name="MaxUses">Uses before the offer locks.</param>
 /// <param name="SoldOut">Whether the offer is currently sold out.</param>
 /// <param name="Xp">Villager xp granted per trade.</param>
+/// <param name="BaseFirst">The unadjusted base-price first input, or null when unknown.</param>
+/// <param name="SpecialPrice">The flat special-price delta (negative means cheaper).</param>
+/// <param name="Demand">The demand counter that raises the price after heavy trading.</param>
+/// <param name="PriceMultiplier">The demand price sensitivity (0..1).</param>
 public sealed record BeaconTradeOffer(
     int Index,
     BeaconTradeItem First,
@@ -114,7 +118,11 @@ public sealed record BeaconTradeOffer(
     int Uses,
     int MaxUses,
     bool SoldOut,
-    int Xp);
+    int Xp,
+    BeaconTradeItem? BaseFirst = null,
+    int SpecialPrice = 0,
+    int Demand = 0,
+    float PriceMultiplier = 0f);
 
 /// <summary>One enchanting-table option for <c>enchant.options</c>.</summary>
 /// <param name="Slot">The option slot (0 top, 1 middle, 2 bottom).</param>
