@@ -74,6 +74,7 @@ public sealed record BeaconBlockInfo(string Name, int Id, IReadOnlyDictionary<st
 /// <param name="PlayerName">The player name for player entities, else null.</param>
 /// <param name="CustomName">The rendered custom name, or null.</param>
 /// <param name="IsPlayer">True for player entities.</param>
+/// <param name="Villager">The villager identity (type, profession, trading level) for villager-family entities, or null for everything else.</param>
 public sealed record BeaconEntityInfo(
     int Id,
     string Uuid,
@@ -87,7 +88,8 @@ public sealed record BeaconEntityInfo(
     bool OnGround,
     string? PlayerName,
     string? CustomName,
-    bool IsPlayer);
+    bool IsPlayer,
+    DMCBK.Core.VillagerInfo? Villager = null);
 
 /// <summary>One trade item (an input or a result) for <c>trade.list</c>.</summary>
 /// <param name="Type">The namespaced item id.</param>

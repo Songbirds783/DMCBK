@@ -416,6 +416,9 @@ public static class BeaconHookCatalog
                     new("pitch", "number", "Pitch in degrees."),
                     new("pose", "text", "The pose name."),
                     new("on_ground", "yes/no", "Whether the entity was on the ground per the last update."),
+                    new("villager_type", "text|none", "The villager's biome-variant type id (for example minecraft:plains), or none for non-villagers."),
+                    new("villager_profession", "text|none", "The villager profession id (for example minecraft:farmer), or none for non-villagers."),
+                    new("villager_level", "number|none", "The villager trading tier 1-5, or none for non-villagers."),
                 ],
                 CostNote: "Bursty on login (every tracked entity fires once): pair with a when filter (e.g. when is_player is yes) and a cooldown clause so a busy spawn does not spam the handler."),
             ["entity_remove"] = new BeaconHookSchema(
@@ -439,6 +442,9 @@ public static class BeaconHookCatalog
                     new("pitch", "number", "Last known pitch in degrees."),
                     new("pose", "text", "The last known pose name."),
                     new("on_ground", "yes/no", "Whether the entity was on the ground per the last update."),
+                    new("villager_type", "text|none", "The villager's biome-variant type id, or none for non-villagers."),
+                    new("villager_profession", "text|none", "The villager profession id, or none for non-villagers."),
+                    new("villager_level", "number|none", "The villager trading tier 1-5, or none for non-villagers."),
                 ],
                 CostNote: "Fires per despawn: pair with a when filter so chunk churn does not spam the handler."),
             ["dialog"] = new BeaconHookSchema(

@@ -1164,7 +1164,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             entity.PlayerName,
             entity.CustomName,
             IsPlayer: !string.IsNullOrEmpty(entity.PlayerName)
-                || string.Equals(entity.TypeId, "minecraft:player", StringComparison.Ordinal));
+                || string.Equals(entity.TypeId, "minecraft:player", StringComparison.Ordinal),
+            entity.Villager);
     }
 
     /// <summary>The merchant result slot in window space (vanilla MerchantMenu: 0,1 pay, 2 take).</summary>

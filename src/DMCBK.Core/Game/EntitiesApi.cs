@@ -122,7 +122,10 @@ public sealed class EntitiesApi
             effects,
             entity.PassengerIds,
             entity.VehicleId,
-            entity.CarriedItem is null ? null : ItemStackInfo.From(entity.CarriedItem, _translations));
+            entity.CarriedItem is null ? null : ItemStackInfo.From(entity.CarriedItem, _translations),
+            entity.Villager is { } villager
+                ? new VillagerInfo(villager.TypeId, villager.ProfessionId, villager.Level)
+                : null);
     }
 }
 
@@ -144,6 +147,7 @@ public sealed class EntitiesApi
 /// <param name="PassengerIds">The ids of entities riding this one.</param>
 /// <param name="VehicleId">The id of the entity this one rides, or null.</param>
 /// <param name="CarriedItem">The stack carried by a dropped-item entity, or null for every other entity and when the stack is not yet known.</param>
+/// <param name="Villager">The villager identity (type, profession, trading level) for villager-family entities, or null for everything else.</param>
 public sealed record EntitySnapshot(
     int Id,
     Guid Uuid,
@@ -161,7 +165,14 @@ public sealed record EntitySnapshot(
     IReadOnlyList<EffectSnapshot> Effects,
     IReadOnlyList<int> PassengerIds,
     int? VehicleId,
-    ItemStackInfo? CarriedItem = null);
+    ItemStackInfo? CarriedItem = null,
+    VillagerInfo? Villager = null);
+
+/// <summary>The villager identity read from entity metadata.</summary>
+/// <param name="TypeId">The villager type (the biome variant), for example <c>minecraft:plains</c>; null when the server reported an id outside the known table.</param>
+/// <param name="ProfessionId">The profession, for example <c>minecraft:farmer</c>; null when out of the known table.</param>
+/// <param name="Level">The trading tier, 1-5 (novice through master).</param>
+public sealed record VillagerInfo(string? TypeId, string? ProfessionId, int Level);
 
 /// <summary>An immutable snapshot of one active status effect.</summary>
 /// <param name="EffectId">The namespaced effect id (for example <c>minecraft:speed</c>).</param>

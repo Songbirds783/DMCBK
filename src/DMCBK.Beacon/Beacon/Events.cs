@@ -226,7 +226,7 @@ public static class BeaconEventFields
         };
 
     /// <summary>
-    /// Builds one entity row map shared by the <c>entities.*</c> builtins and the <c>entity_add</c>/<c>entity_remove</c> fields: id, uuid, type, name, custom_name, is_player, x, y, z, distance, yaw, pitch, pose, on_ground.
+    /// Builds one entity row map shared by the <c>entities.*</c> builtins and the <c>entity_add</c>/<c>entity_remove</c> fields: id, uuid, type, name, custom_name, is_player, x, y, z, distance, yaw, pitch, pose, on_ground, and villager_type/villager_profession/villager_level for villager-family entities.
     /// </summary>
     public static IReadOnlyDictionary<string, BeaconValue> EntityRow(BeaconEntityInfo entity, double? distance)
     {
@@ -247,6 +247,9 @@ public static class BeaconEventFields
             ["pitch"] = BeaconValue.Number(entity.Pitch),
             ["pose"] = BeaconValue.Text(entity.Pose),
             ["on_ground"] = BeaconValue.YesNo(entity.OnGround),
+            ["villager_type"] = entity.Villager?.TypeId is string vt ? BeaconValue.Text(vt) : BeaconValue.None,
+            ["villager_profession"] = entity.Villager?.ProfessionId is string vp ? BeaconValue.Text(vp) : BeaconValue.None,
+            ["villager_level"] = entity.Villager is { Level: var vl } ? BeaconValue.Number(vl) : BeaconValue.None,
         };
     }
 
